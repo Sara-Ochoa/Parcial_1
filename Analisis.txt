@@ -1,0 +1,36 @@
+Desarrollo del Parcial 1 – Informática 2
+
+1.Realice las conexiones necesarias para tener en estado operativo el sistema compuesto por 64 LEDs conectados:
+realizar el circuito en tinkercard con todos los componentes necesarios.
+
+2.Realice una función llamada verificación que le permita al usuario comprobar que todos los LEDs de la matriz de 8x8 están
+funcionando correctamente: parecido al programa que pone tinkercard predeterminado para una intermitencia; con el hecho de
+que no solo se va a encender un solo led, sino una matriz con 64 leds. Además indicando cuanto tiempo entre encendido y
+apagado y cuantas secuencias.
+
+
+3.Desarrolle una función llamada imagen, que le permita al usuario mostrar un patrón en la matriz de LEDs. El usuario debe poder ingresar el patrón por el monitor serial: El patrón es una de las cuatro opciones que se tienen.
+
+4.Escriba una función que genere cada uno de los patrones: En una sola función debe estar la implementación de cada uno de los patrones, con el tiempo de retardo indicado.
+
+    -Patrones: los “espacios en blanco” van a ser el nivel de potencia low (bajo-apagado-0) y las x van a ser el nivel de potencia high(alto-encendido-1).
+
+5.Desarrolle una función llamada publik, que le permita al usuario seleccionar (con comandos enviados por el puerto serial): Hacer un menú para que el usuario elija lo que quiere realizar teniendo solo 3 opciones (Una especie de switch)
+
+74HC595: es útil para controlar un gran número de salidas, como los LEDs.
+Cuando coloques los LEDs asegúrate de que estén conectados en orden, de modo que QA esté conectado al primer LED, y QH esté conectado al último LED, ¡ya que de lo contrario nuestro código no va a encender los LEDs en el orden correcto!
+
+Análisis
+1.	Ya que están pidiendo una matriz 8x8, es decir, de 64 leds, sabemos que una placa de Arduino no cuenta con todos los
+puertos (pines) necesarios para esta gran cantidad de leds, es por ello por lo que se va a usar el integrando 74HC595 que es
+útil para controlar un gran número de salidas como por ejemplo (en este caso) los leds. Cada uno de estos chips cuenta con 8
+salidas para 8 leds respectivamente de una fila, por esto se va a usar 8 de estos chips (uno para cada fila de la matriz).
+Como se necesitan 64 leds para llenar la matriz, también es necesario utilizar 64 resistencias (una para cada led) para que
+no pase toda la corriente directamente al led y pueda sobrecargarlo.
+La razón de utilizar el integrado 74HC595 fue debido a la limitante de solo usar máximo 7 pines digitales del Arduino,
+investigando un poco nos topamos con que uno de esos integrados se puede comunicar con otro por medio de (lo que se llama en
+tinkercard) la salida invertida 8, es decir, el primero se conecta con el segundo, el segundo con el tercero, el tercero con
+el cuarto y así sucesivamente hasta el final. Como se mencionaba anteriormente, cada uno de estos integrados va a controlar
+cada una de las filas de la matriz, el primero para la primera fila, el segundo para la segunda y así consecutivamente.
+
+2.
