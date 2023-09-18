@@ -1,0 +1,33 @@
+≡Implementación en Arduino
+
+1. Descripción del proyecto
+2. Elementos utilizados y motivo de su uso
+3. Funcionalidad de Verificación
+┤» a. Descripción del método implementado
+┤» b. Explicación del uso de los pines
+┤» c. Conclusiones sobre el propósito de la función 
+
+1. ¦ Se inicia este proyecto con la necesidad de controlar una Matriz de LEDs 8x8 con Arduino y que sea un circuito programable capaz de mostrar patrones luminosos.
+
+Se tomaron las siguientes decisiones teniendo en cuenta las limitaciones y recomendaciones presentadas al momento de la socializacion de este parcial:
+
+2. ¦
+~ Utilizar únicamente 3 pines digitales encargados de llevar datos, control de desplazamiento y almacenamiento de los datos en el registro. 
+~ Hacer uso de 8 chips 74HC595 utilizando la salida invertida de uno como entrada del siguiente, creando una cascada de registros de desplazamiento.
+~ Crear una matriz de 64 LEDs en la que cada una de sus filas, mediante el ánodo de cada LED, estará enlazada a un Shift Register diferente y recibirá señales a través de las distintas salidas (1-8) del chip.
+~ Cada uno de esos leds deberá ir cableado a una de las 64 resistencias de 450 ohmios ubicadas en cada una de las salidas de los 74HC595.
+
+3. ¦ Comprobación del funcionamiento integral del sistema
+
+A. ~ Para cumplir con la primera disposición del proyecto, necesitamos crear un sistema que compruebe que todo marche correctamente.
+
+En esta función, se utiliza un bucle para encender y apagar todos los LEDs de la matriz varias veces. El ciclo for controla el envío de un byte con todos los bits a 1 (todos los LEDs encendidos) y luego a 0 (todos los LEDs apagados). Los pines pinData, pinClock y pinLatch se utilizan para enviar estos datos al 74HC595, lo que resulta en la activación de los LEDs.
+
+B. ~ 
+pinData se utiliza para enviar los datos al registro de desplazamiento.
+
+pinClock desempeña un papel crucial en el funcionamiento del circuito, ya que es el responsable de sincronizar el desplazamiento bit a bit.
+
+pinLatch se usa para actualizar las salidas del registro con los datos desplazados. Cuando se pulsa, los datos en el registro se transfieren a las salidas del chip, lo que genera el cambio de los LEDs en la matriz.
+
+C. ~ En resumen, el objetivo de esta funcionalidad es controlar la matriz de LEDs y se logra mediante la manipulación de los registros de desplazamiento del 74HC595, donde los datos se desplazan de bit en bit a través del registro y se transfieren a las salidas para controlar el estado de cada LED.
