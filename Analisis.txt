@@ -7,7 +7,7 @@ realizar el circuito en tinkercard con todos los componentes necesarios.
 funcionando correctamente.
 
 3.Desarrolle una función llamada imagen, que le permita al usuario mostrar un patrón en la matriz de LEDs. El usuario debe
-poder ingresar el patrón por el monitor serial: El patrón es una de las cuatro opciones que se tienen.
+poder ingresar el patrón por el monitor serial.
 
 4.Escriba una función que genere cada uno de los patrones: En una sola función debe estar la implementación de cada uno de
 los patrones, con el tiempo de retardo indicado.
@@ -41,9 +41,15 @@ apagado y cuantas secuencias: Esto se puede realizar con ciclos for anidados, un
 repetir la verificación, otro que diga que enciende todos los leds recorriendo cada fila y encendiéndolos y otro que los
 recorra pero para apagarlos, claramente especificando cuanto tiempo entre encendido y apagado.
 
-4. Realizar una secuencia para cada uno de los patrones, todos estando en la misma función y señalándole el tiempo de retardo
+3.Crear una función que le permita crear un patrón personalizado al usuario, preguntándole la fila, la columna y el estado
+(encendido o apagado en caso de que lo requiera) del led, esto se repetirá (while) cuantas veces el usuario quiera ingresar
+datos hasta que ingrese el valor 0 en fila y columna, Esta funcion se encarga de ir encendiendo los leds que quiera el
+usuario hasta que de esa manera se forme un patron y cuando ingrese los valores de 0, se le mostrará todo el patrón completo.
+Además en este caso si se le va a preguntar al usuario el tiempo de retardo entre encedido y apagado.
+
+4.Realizar una secuencia para cada uno de los patrones, todos estando en la misma función y señalándole el tiempo de retardo
 entre cada visualizaciones (se mostrarían todos una sola vez, es decir, cuando muestre el último patrón, se sale de la
 función y regresaría al menu principal).
 
-5. En esta parte simplemente saldrán por el serial las opciones que el usuario tiene, y depende de la que elija, tendrá que
+5.En esta parte simplemente saldrán por el serial las opciones que el usuario tiene, y depende de la que elija, tendrá que
 recibir (leer) información del serial enviada por el usuario (creo que solo sería el delay).
