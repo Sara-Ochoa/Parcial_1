@@ -53,3 +53,55 @@ función y regresaría al menu principal).
 
 5.En esta parte simplemente saldrán por el serial las opciones que el usuario tiene, y depende de la que elija, tendrá que
 recibir (leer) información del serial enviada por el usuario (creo que solo sería el delay).
+
+
+Para el desarrollo del programa como idea inicial, se usó una variable llamada “Patrón” que era un arreglo bidimensional
+estático, ahí se almacenaba la información de la matriz, que leds estaban encendidos, cuales, apagados, etc.
+
+Para el desarrollo del programa implementamos funciones adicionales, estas fueron:
+1.CleanScreen: Da la sensación de limpiar la pantalla al usuario para que no se vean pegados uno de otros los mensajes que
+se imprimen dependiendo de la opción que se elija. Para esta simplemente se colocó un “for” que itere n veces y en cada una
+de las iteraciones, imprima un salto de línea.
+
+2.setPatron: Pone ceros en toda la matriz.
+
+3.patronOn: Imprime la matriz como esté en ese momento.
+
+Cada uno de los patrones están en una función separada y para mostrarlos, simplemente se invocan en la función mostrarPatrones.
+En la función imagen, le pide al usuario el tiempo de retardo entre cada visualización del patrón, ese se colocó para que
+ingrese el tiempo en segundos y el programa lo que hace es multiplicar por 1000 para obtener los milisegundos, pero como
+también puede ingresar menos de un segundo, se colocó un float para que pueda multiplicar 0.x.
+
+La primero que modificamos fue los tipos de datos que usábamos para representar cada uno de los LEDs en la matriz interna
+del sistema, pasando de usar int a usar uint8_t que es un unsigned int que utiliza únicamente un byte de la memoria y es
+suficiente para almacenar datos de 1s y 0s.
+Cuando el programa estaba funcionando, tal y como lo pedía el problema, se cambió el arreglo estático por punteros y
+arreglos dinámicos para almacenar toda la información de las matrices, lo principal es declarar un puntero a puntero a un
+tipo de dato que para nosotros es uint8_t , ahora para que el arreglo
+sea dinámico debemos establecer su número de filas y columnas y asignar la memoria con el operador new, creando así un
+arreglo bidimensional en que cada fila es un puntero a un arreglo de enteros, lo que a final nos es útil para liberar
+la memoria al momento que ya no necesitamos el arreglo, y utilizando un ciclo podemos eliminar cada uno de los punteros
+fila y por ultimo liberar el puntero a la matriz
+
+
+Problemas de desarrollo que se afrontó.
+El principal problema que se tuvo fue al inicio, se tenía muy poco (casi nulo) conocimiento de cómo funcionaba la plataforma
+TINKERCARD, de cómo funcionaba el integrando 74HC595, de cómo debían ser todas las conexiones en el circuito, cuanto voltaje
+usar en las resistencias, etc. Cuando se logró entender estos temas y se tenía la parte física “funcionado” comenzamos a
+mirar cómo llevar la idea de nuestras cabezas de cada una de las funciones al código como tal, hubo que investigar como
+operaban algunos componentes que con el código con el circuito y ahí comenzaron a fluir mejor las cosas.
+Otro problema que se tuvo fue al momento de crear los patrones asignados, encontrarles la forma para que su solución
+implementara ciclos (no fuera de forma trivial), especialmente el tercer patrón fue un poco más complicado que los demás.
+
+
+
+
+
+
+
+
+
+
+
+
+
