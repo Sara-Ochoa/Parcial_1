@@ -1,0 +1,107 @@
+Desarrollo del Parcial 1 – Informática 2
+
+1.Realice las conexiones necesarias para tener en estado operativo el sistema compuesto por 64 LEDs conectados:
+realizar el circuito en tinkercard con todos los componentes necesarios.
+
+2.Realice una función llamada verificación que le permita al usuario comprobar que todos los LEDs de la matriz de 8x8 están
+funcionando correctamente.
+
+3.Desarrolle una función llamada imagen, que le permita al usuario mostrar un patrón en la matriz de LEDs. El usuario debe
+poder ingresar el patrón por el monitor serial.
+
+4.Escriba una función que genere cada uno de los patrones: En una sola función debe estar la implementación de cada uno de
+los patrones, con el tiempo de retardo indicado.
+
+    -Patrones: los “espacios en blanco” van a ser el nivel de potencia low (bajo-apagado-0) y las x van a ser el nivel de
+    potencia high(alto-encendido-1).
+
+5.Desarrolle una función llamada publik, que le permita al usuario seleccionar (con comandos enviados por el puerto serial):
+Hacer un menú para que el usuario elija lo que quiere realizar teniendo solo 3 opciones.
+
+74HC595: es útil para controlar un gran número de salidas, como los LEDs.
+Cuando coloques los LEDs asegúrate de que estén conectados en orden, de modo que QA esté conectado al primer LED, y QH esté
+conectado al último LED, ¡ya que de lo contrario nuestro código no va a encender los LEDs en el orden correcto!
+
+Análisis
+1.Ya que están pidiendo una matriz 8x8, es decir, de 64 leds, sabemos que una placa de Arduino no cuenta con todos los
+puertos (pines) necesarios para esta gran cantidad de leds, es por ello por lo que se va a usar el integrando 74HC595 que es
+útil para controlar un gran número de salidas como por ejemplo (en este caso) los leds. Cada uno de estos chips cuenta con 8
+salidas para 8 leds respectivamente de una fila, por esto se va a usar 8 de estos chips (uno para cada fila de la matriz).
+Como se necesitan 64 leds para llenar la matriz, también es necesario utilizar 64 resistencias (una para cada led) para que
+no pase toda la corriente directamente al led y pueda sobrecargarlo.
+La razón de utilizar el integrado 74HC595 fue debido a la limitante de solo usar máximo 7 pines digitales del Arduino,
+investigando un poco nos topamos con que uno de esos integrados se puede comunicar con otro por medio de (lo que se llama en
+tinkercard) la salida invertida 8, es decir, el primero se conecta con el segundo, el segundo con el tercero, el tercero con
+el cuarto y así sucesivamente hasta el final. Como se mencionaba anteriormente, cada uno de estos integrados va a controlar
+cada una de las filas de la matriz, el primero para la primera fila, el segundo para la segunda y así consecutivamente...
+
+2.Parecido al programa que pone tinkercard predeterminado para una intermitencia; con el hecho de
+que no solo se va a encender un solo led, sino una matriz con 64 leds. Además indicando cuanto tiempo entre encendido y
+apagado y cuantas secuencias: Esto se puede realizar con ciclos for anidados, uno que cuente las secuencias que se va a
+repetir la verificación, otro que diga que enciende todos los leds recorriendo cada fila y encendiéndolos y otro que los
+recorra pero para apagarlos, claramente especificando cuanto tiempo entre encendido y apagado.
+
+3.Crear una función que le permita crear un patrón personalizado al usuario, preguntándole la fila, la columna y el estado
+(encendido o apagado en caso de que lo requiera) del led, esto se repetirá (while) cuantas veces el usuario quiera ingresar
+datos hasta que ingrese el valor 0 en fila y columna, Esta funcion se encarga de ir encendiendo los leds que quiera el
+usuario hasta que de esa manera se forme un patron y cuando ingrese los valores de 0, se le mostrará todo el patrón completo.
+Además en este caso si se le va a preguntar al usuario el tiempo de retardo entre encedido y apagado.
+
+4.Realizar una secuencia para cada uno de los patrones, todos estando en la misma función y señalándole el tiempo de retardo
+entre cada visualizaciones (se mostrarían todos una sola vez, es decir, cuando muestre el último patrón, se sale de la
+función y regresaría al menu principal).
+
+5.En esta parte simplemente saldrán por el serial las opciones que el usuario tiene, y depende de la que elija, tendrá que
+recibir (leer) información del serial enviada por el usuario (creo que solo sería el delay).
+
+
+Para el desarrollo del programa como idea inicial, se usó una variable llamada “Patrón” que era un arreglo bidimensional
+estático, ahí se almacenaba la información de la matriz, que leds estaban encendidos, cuales, apagados, etc.
+
+Para el desarrollo del programa implementamos funciones adicionales, estas fueron:
+1.CleanScreen: Da la sensación de limpiar la pantalla al usuario para que no se vean pegados uno de otros los mensajes que
+se imprimen dependiendo de la opción que se elija. Para esta simplemente se colocó un “for” que itere n veces y en cada una
+de las iteraciones, imprima un salto de línea.
+
+2.setPatron: Pone ceros en toda la matriz.
+
+3.patronOn: Imprime la matriz como esté en ese momento.
+
+Cada uno de los patrones están en una función separada y para mostrarlos, simplemente se invocan en la función mostrarPatrones.
+En la función imagen, le pide al usuario el tiempo de retardo entre cada visualización del patrón, ese se colocó para que
+ingrese el tiempo en segundos y el programa lo que hace es multiplicar por 1000 para obtener los milisegundos, pero como
+también puede ingresar menos de un segundo, se colocó un float para que pueda multiplicar 0.x.
+
+La primero que modificamos fue los tipos de datos que usábamos para representar cada uno de los LEDs en la matriz interna
+del sistema, pasando de usar int a usar uint8_t que es un unsigned int que utiliza únicamente un byte de la memoria y es
+suficiente para almacenar datos de 1s y 0s.
+Cuando el programa estaba funcionando, tal y como lo pedía el problema, se cambió el arreglo estático por punteros y
+arreglos dinámicos para almacenar toda la información de las matrices, lo principal es declarar un puntero a puntero a un
+tipo de dato que para nosotros es uint8_t , ahora para que el arreglo
+sea dinámico debemos establecer su número de filas y columnas y asignar la memoria con el operador new, creando así un
+arreglo bidimensional en que cada fila es un puntero a un arreglo de enteros, lo que a final nos es útil para liberar
+la memoria al momento que ya no necesitamos el arreglo, y utilizando un ciclo podemos eliminar cada uno de los punteros
+fila y por ultimo liberar el puntero a la matriz
+
+
+Problemas de desarrollo que se afrontó.
+El principal problema que se tuvo fue al inicio, se tenía muy poco (casi nulo) conocimiento de cómo funcionaba la plataforma
+TINKERCARD, de cómo funcionaba el integrando 74HC595, de cómo debían ser todas las conexiones en el circuito, cuanto voltaje
+usar en las resistencias, etc. Cuando se logró entender estos temas y se tenía la parte física “funcionado” comenzamos a
+mirar cómo llevar la idea de nuestras cabezas de cada una de las funciones al código como tal, hubo que investigar como
+operaban algunos componentes que con el código con el circuito y ahí comenzaron a fluir mejor las cosas.
+Otro problema que se tuvo fue al momento de crear los patrones asignados, encontrarles la forma para que su solución
+implementara ciclos (no fuera de forma trivial), especialmente el tercer patrón fue un poco más complicado que los demás.
+
+
+
+
+
+
+
+
+
+
+
+
+
